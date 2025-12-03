@@ -1,0 +1,44 @@
+From c5537149c2534d96438a45aa1fc40663fc9783e9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Trung=20L=C3=AA?= <8@tle.id.au>
+Date: Thu, 14 Sep 2023 00:23:35 +1000
+Subject: [PATCH] Add workarounds for compilation with GCC 9 or newer
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Trung Lê <8@tle.id.au>
+---
+ src/occBootLoader/img_defs.mk | 2 +-
+ src/occ_405/img_defs.mk       | 3 +++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/occBootLoader/img_defs.mk b/src/occBootLoader/img_defs.mk
+index 9437ce0..44b4526 100644
+--- a/src/occBootLoader/img_defs.mk
++++ b/src/occBootLoader/img_defs.mk
+@@ -227,7 +227,7 @@ PIPE-CFLAGS = -pipe -Wa,-m405
+ GCC-CFLAGS += -g -Wall -fsigned-char -msoft-float  \
+ 	-m32 -mbig-endian -mcpu=405 -mmultiple -mstring \
+ 	-meabi -msdata=eabi -ffreestanding -fno-common \
+-	-fno-inline-functions-called-once \
++	-fno-inline-functions-called-once -fno-pic \
+ 	-fno-asynchronous-unwind-tables -std=gnu89
+ 
+ CFLAGS      =  -c $(GCC-CFLAGS) $(PIPE-CFLAGS) $(GCC-O-LEVEL) $(INCLUDES)
+diff --git a/src/occ_405/img_defs.mk b/src/occ_405/img_defs.mk
+index 0a67439..e8b9738 100644
+--- a/src/occ_405/img_defs.mk
++++ b/src/occ_405/img_defs.mk
+@@ -255,6 +255,9 @@ GCC-CFLAGS += -g -Wall -fsigned-char -msoft-float  \
+ 	-m32 -mbig-endian -mcpu=405 -mmultiple -mstring \
+ 	-meabi -msdata=eabi -ffreestanding -fno-common \
+ 	-fno-inline-functions-called-once \
++	-fno-pic -fno-stack-protector \
++	-Wno-address-of-packed-member \
++	-Wno-array-bounds \
+ 	-fno-asynchronous-unwind-tables -std=gnu89
+ 
+ CFLAGS      =  -c $(GCC-CFLAGS) $(PIPE-CFLAGS) $(GCC-O-LEVEL) $(INCLUDES)
+-- 
+2.43.7
+
